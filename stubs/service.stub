@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Modules\{{ModuleName}}\Services;
+
+class {{ModuleName}}Service
+{
+    /**
+     * Example service for the {{ModuleName}} module.
+     */
+
+}

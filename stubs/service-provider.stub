@@ -1,0 +1,40 @@
+<?php
+
+namespace {{ModuleNamespace}}\Providers;
+
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\ServiceProvider;
+
+class {{ModuleName}}ServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any module services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any module services.
+     */
+    public function boot(): void
+    {
+        $modulePath = base_path('modules/{{ModuleName}}/');
+
+        $routes = $modulePath . 'Routes/web.php';
+        if (is_file($routes)) {
+            $this->loadRoutesFrom($routes);
+        }
+
+        $views = $modulePath . 'Resources/views';
+        if (File::isDirectory($views)) {
+            $this->loadViewsFrom($views, '{{ModuleNameKebab}}');
+        }
+
+        $migrations = $modulePath . 'Database/migrations';
+        if (File::isDirectory($migrations)) {
+            $this->loadMigrationsFrom($migrations);
+        }
+    }
+}

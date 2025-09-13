@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Modules\{{ModuleName}}\Http\Livewire;
+
+use Livewire\Component;
+
+class {{ModuleName}}Component extends Component
+{
+    /**
+     * Render the module index.
+     */
+    public function render()
+    {
+        return view('{{ModuleNameKebab}}::livewire.{{ModuleNameKebab}}-component');
+    }
+}

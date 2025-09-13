@@ -1,0 +1,14 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Modules\{{ModuleName}}\Http\Controllers\{{ModuleName}}Controller;
+
+/**
+* Routes for the {{ModuleName}} module
+*/
+
+Route::prefix('{{ModuleNameKebab}}')
+    ->name('{{ModuleNameKebab}}.')
+    ->group(function () {
+        Route::get('/', [{{ModuleName}}Controller::class, 'index'])->name('index');
+    });
