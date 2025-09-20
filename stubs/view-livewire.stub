@@ -1,3 +1,4 @@
 <div>
     <h2>Livewire component for {{ModuleName}} module</h2>
+    <p>Livewire component for {{ModuleName}} entity in {{ModuleName}} module.</p>
 </div>

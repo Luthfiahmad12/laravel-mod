@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use {{ModuleNamespace}}\Http\Controllers\{{ModuleName}}Controller;
+use {{ModuleNamespace}}\Http\Controllers\Api\{{ModuleName}}Controller;
 
 /**
- * Routes for the {{ModuleName}} entity
+ * API Routes for the {{ModuleName}} entity
  */
 
 Route::get('/', [{{ModuleName}}Controller::class, 'index'])->name('{{ModuleNameKebab}}.index');

@@ -1,0 +1,61 @@
+# Laravel/PHP #
+################
+/vendor/
+.env
+.env.backup
+.phpunit.result.cache
+.php_cs.cache
+.php_cs_dist.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+.php_cs
+.php_cs.dist
+.storage
+.styleci.yml
+.vscode/
+.idea/
+*.log
+*.lock
+*.tmp
+*.tmp~
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE Files #
+#############
+*.swp
+*.swo
+*~
+.*.swp
+.*.swo
+
+# Testing #
+###########
+.coverage
+.php_cs.cache
+.php_cs_dist.cache
+.phpunit.result.cache
+coverage/
+
+# Build #
+#########
+node_modules/
+.build/
+
+# Package #
+###########
+*.zip
+*.tar.gz
+
+# Modules (generated) #
+#######################
+/modules/

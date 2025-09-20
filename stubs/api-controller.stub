@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ModuleNamespace}}\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use {{ModuleNamespace}}\Services\{{ModuleName}}Service;
+use Illuminate\Http\JsonResponse;
+
+class {{ModuleName}}Controller extends Controller
+{
+    /**
+     * Instantiate a new controller instance.
+     */
+    public function __construct(
+        protected {{ModuleName}}Service $service
+    ) {
+        // Constructor injection for service dependency
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): JsonResponse
+    {
+        //
+    }
+}

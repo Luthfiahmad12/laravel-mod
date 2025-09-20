@@ -5,26 +5,35 @@
         "modules",
         "laravel",
         "mod",
-        "modular"
+        "modular",
+        "package"
     ],
-    "type": "library",
+    "homepage": "https://github.com/Luthfiahmad12/laravel-mod",
+    "license": "MIT",
     "authors": [
         {
             "name": "Achmad Luthfi Afif",
-            "email": "luthfiafif625@gmail.com"
+            "email": "luthfiafif625@gmail.com",
+            "homepage": "https://github.com/Luthfiahmad12",
+            "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/support": "^10.0|^11.0"
+        "laravel/framework": "^11.0"
     },
     "require-dev": {
-        "laravel/framework": "^12.0",
-        "orchestra/testbench": "^10.0"
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^10.0"
     },
     "autoload": {
         "psr-4": {
             "LaravelMod\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelMod\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -34,6 +43,16 @@
             ]
         }
     },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-html coverage"
+    },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/Luthfiahmad12"
+        }
+    ]
 }

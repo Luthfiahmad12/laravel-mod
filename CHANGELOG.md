@@ -1,0 +1,37 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Initial release of Laravel Mod package
+- Module generation with `mod:make` command
+- Entity generation with `mod:make-entity` command
+- Module deletion with `mod:delete-module` command
+- Entity deletion with `mod:delete-entity` command
+- Module caching with `mod:cache` command
+- Web and API module support
+- Livewire component generation
+- Comprehensive test suite
+- Documentation and examples
+
+### Changed
+- Improved command naming consistency
+- Enhanced service provider architecture
+- Optimized module loading with caching
+- Simplified route and view loading
+
+### Fixed
+- API dependency checking for JWT Auth
+- Route naming consistency
+- View path organization
+- Command output formatting
+
+## [1.0.0] - 2025-09-19
+
+### Added
+- Initial stable release

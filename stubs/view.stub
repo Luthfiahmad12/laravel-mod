@@ -1,3 +1,4 @@
 <div>
     <h2>{{ModuleName}} Module</h2>
+    <p>View for {{ModuleName}} entity in {{ModuleName}} module.</p>
 </div>

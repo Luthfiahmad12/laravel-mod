@@ -2,13 +2,21 @@
 
 namespace {{ModuleNamespace}}\Providers;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class {{ModuleName}}ServiceProvider extends ServiceProvider
 {
     /**
      * Register any module services.
+     * 
+     * Use this method to register bindings, singletons, and other services
+     * specific to this module.
+     * 
+     * Example:
+     * $this->app->bind(
+     *     \{{ModuleNamespace}}\Services\{{ModuleName}}ServiceInterface::class,
+     *     \{{ModuleNamespace}}\Services\{{ModuleName}}Service::class
+     * );
      */
     public function register(): void
     {
@@ -17,24 +25,15 @@ class {{ModuleName}}ServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any module services.
+     * 
+     * Use this method to register blade directives, middleware, and other
+     * bootstrapping logic specific to this module.
+     * 
+     * Note: Routes, views, and migrations are automatically loaded by
+     * the main LaravelMod package service provider.
      */
     public function boot(): void
     {
-        $modulePath = base_path('modules/{{ModuleName}}/');
-
-        $routes = $modulePath . 'Routes/web.php';
-        if (is_file($routes)) {
-            $this->loadRoutesFrom($routes);
-        }
-
-        $views = $modulePath . 'Resources/views';
-        if (File::isDirectory($views)) {
-            $this->loadViewsFrom($views, '{{ModuleNameKebab}}');
-        }
-
-        $migrations = $modulePath . 'Database/migrations';
-        if (File::isDirectory($migrations)) {
-            $this->loadMigrationsFrom($migrations);
-        }
+        //
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\{{ModuleName}}\Http\Controllers;
+namespace {{ModuleNamespace}}\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\{{ModuleName}}\Services\{{ModuleName}}Service;
-use Illuminate\Http\Request;
+use {{ModuleNamespace}}\Services\{{ModuleName}}Service;
 
 class {{ModuleName}}Controller extends Controller
 {
@@ -14,12 +13,10 @@ class {{ModuleName}}Controller extends Controller
     public function __construct(protected {{ModuleName}}Service $service) {}
 
     /**
-     * Display a listing of the resource.
+     * Display the module index view.
      */
-     public function index()
+    public function index()
     {
-        // TODO: implement logic for listing
-        return view('{{ModuleNameLower}}::index');
+        return view('{{ModuleNameKebab}}::{{ModuleNameKebab}}.index');
     }
 }
-

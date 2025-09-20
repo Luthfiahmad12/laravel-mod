@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\{{ModuleName}}\Services;
+namespace {{ModuleNamespace}}\Services;
 
 class {{ModuleName}}Service
 {
     /**
-     * Example service for the {{ModuleName}} module.
+     * Service for {{ModuleName}} module.
+     * Add your business logic here.
      */
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\{{ModuleName}}\Models;
+namespace {{ModuleNamespace}}\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,6 +10,32 @@ class {{ModuleName}} extends Model
     use HasFactory;
 
     /**
-     * Model for the {{ModuleName}} module.
+     * The table associated with the model.
+     *
+     * @var string
      */
+    protected $table = '{{ModuleNameSnakePlural}}';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        // Add your fillable fields here
+        // 'name',
+        // 'email',
+        // 'description',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        // Add your casts here
+        // 'email_verified_at' => 'datetime',
+        // 'is_active' => 'boolean',
+    ];
 }
