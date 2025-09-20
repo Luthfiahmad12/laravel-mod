@@ -90,12 +90,12 @@ class MakeEntityCommand extends Command
             
             // Check if it's a Livewire stub but Livewire not available
             if (strpos($stub, 'livewire') !== false && !class_exists('Livewire\Component')) {
-                $this->warn("⚠️ Livewire not installed. Skipping {$studly}Component.");
+                $this->warn("Livewire not installed. Skipping {$studly}Component.");
                 continue;
             }
             
             if (!File::exists($source)) {
-                $this->warn("⚠️ Stub not found: {$stub}");
+                $this->warn("Stub not found: {$stub}");
                 continue;
             }
 
@@ -109,7 +109,7 @@ class MakeEntityCommand extends Command
             
             // Write file content
             if (File::put($modulePath . '/' . $target, $content) === false) {
-                $this->warn("⚠️ Failed to create file: {$target}");
+                $this->warn("Failed to create file: {$target}");
                 continue;
             }
             $generatedFiles[] = $target;

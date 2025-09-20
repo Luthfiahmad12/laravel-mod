@@ -26,7 +26,7 @@ class CacheCommand extends Command
             Cache::forget('laravel-mod.route-paths');
             $this->line('✓ Route path cache cleared!');
             
-            $this->info('✅ Module caches cleared successfully!');
+            $this->info('Module caches cleared successfully!');
         } else {
             $this->info('Caching module information...');
             
@@ -45,7 +45,7 @@ class CacheCommand extends Command
             Cache::forever('laravel-mod.route-paths', $routePaths);
             $this->line('✓ Route paths cached!');
             
-            $this->info('✅ Module caches generated successfully!');
+            $this->info('Module caches generated successfully!');
         }
 
         return self::SUCCESS;

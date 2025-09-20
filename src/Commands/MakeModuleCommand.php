@@ -118,7 +118,7 @@ class MakeModuleCommand extends Command
 
             // Skip Livewire if not installed
             if (!$isApi && $stub === 'livewire.stub' && !class_exists('Livewire\Component')) {
-                $this->warn("⚠️ Livewire not installed. Skipping {$studly}Component.");
+                $this->warn("Livewire not installed. Skipping {$studly}Component.");
                 continue;
             }
 
@@ -126,7 +126,7 @@ class MakeModuleCommand extends Command
             $targetPath = $modulePath . '/' . $target;
 
             if (!File::exists($source)) {
-                $this->warn("⚠️ Stub not found: {$stub}");
+                $this->warn("Stub not found: {$stub}");
                 continue;
             }
 
@@ -140,7 +140,7 @@ class MakeModuleCommand extends Command
 
             // Write file content
             if (File::put($targetPath, $content) === false) {
-                $this->warn("⚠️ Failed to create file: {$target}");
+                $this->warn("Failed to create file: {$target}");
                 continue;
             }
             $this->line("  - <info>{$target}</info>");

@@ -23,7 +23,7 @@ class CacheCommandTest extends TestCase
     {
         $this->artisan('mod:cache')
             ->expectsOutput('Caching module information...')
-            ->expectsOutput('✅ Module caches generated successfully!')
+            ->expectsOutput('Module caches generated successfully!')
             ->assertExitCode(0);
             
         // Assert caches are created
@@ -46,7 +46,7 @@ class CacheCommandTest extends TestCase
         // Clear caches
         $this->artisan('mod:cache', ['--clear' => true])
             ->expectsOutput('Clearing module caches...')
-            ->expectsOutput('✅ Module caches cleared successfully!')
+            ->expectsOutput('Module caches cleared successfully!')
             ->assertExitCode(0);
             
         // Assert caches are cleared
