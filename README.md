@@ -36,8 +36,8 @@ composer require laravel-mod/core
 
 ### Requirements
 
--   **PHP**: ^8.2
--   **Laravel**: ^11.0
+-   **PHP**: 8.1 or higher
+-   **Laravel**: 11 or higher
 
 > Note: This package uses Laravel's auto-discovery feature and will be automatically registered after installation.
 
