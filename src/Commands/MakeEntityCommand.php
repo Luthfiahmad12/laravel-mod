@@ -132,6 +132,8 @@ class MakeEntityCommand extends Command
      */
     protected function addEntityRoute(string $modulePath, string $studly, string $kebab, bool $isApi): void
     {
+        $moduleStudly = basename($modulePath); // Get module name from path
+        
         // For web routes
         $webRoutePath = $modulePath . '/Routes/web.php';
         if (File::exists($webRoutePath)) {
@@ -140,16 +142,14 @@ class MakeEntityCommand extends Command
             // Check if route already exists
             if (strpos($webRouteContent, "Route::get('/{$kebab}'") === false) {
                 // Add use statement for the entity controller
-                $useStatement = "use App\\Modules\\" . basename($modulePath) . "\\Http\\Controllers\\{$studly}Controller;
-";
+                $useStatement = "use App\\Modules\\{$moduleStudly}\\Http\\Controllers\\{$studly}Controller;\n";
                 // Check if use statement already exists
                 if (strpos($webRouteContent, $useStatement) === false) {
                     // Find the position to insert the use statement (after the last use statement)
                     $lastUsePosition = strrpos($webRouteContent, "use ");
                     if ($lastUsePosition !== false) {
                         // Find the end of the use statement line
-                        $endOfUseLine = strpos($webRouteContent, ";
-", $lastUsePosition);
+                        $endOfUseLine = strpos($webRouteContent, ";\n", $lastUsePosition);
                         if ($endOfUseLine !== false) {
                             $webRouteContent = substr_replace($webRouteContent, $useStatement, $endOfUseLine + 2, 0);
                         }
@@ -159,8 +159,7 @@ class MakeEntityCommand extends Command
                 // Find the position to insert the new route (before the comment or at the end)
                 $insertPosition = strrpos($webRouteContent, '// Entity routes will be added here');
                 if ($insertPosition !== false) {
-                    $newRoute = "Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.index');
-";
+                    $newRoute = "Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.index');\n";
                     $webRouteContent = substr_replace($webRouteContent, $newRoute, $insertPosition, 0);
                     File::put($webRoutePath, $webRouteContent);
                     $this->line("  - <info>Added route to web.php</info>");
@@ -168,9 +167,7 @@ class MakeEntityCommand extends Command
                     // Fallback: add before the closing PHP tag
                     $insertPosition = strrpos($webRouteContent, '?>');
                     if ($insertPosition !== false) {
-                        $newRoute = "
-Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.index');
-";
+                        $newRoute = "\nRoute::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.index');\n";
                         $webRouteContent = substr_replace($webRouteContent, $newRoute, $insertPosition, 0);
                         File::put($webRoutePath, $webRouteContent);
                         $this->line("  - <info>Added route to web.php</info>");
@@ -187,17 +184,15 @@ Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.i
                 
                 // Check if route already exists
                 if (strpos($apiRouteContent, "Route::get('/{$kebab}'") === false) {
-                    // Add use statement for the entity controller
-                    $useStatement = "use App\\Modules\\" . basename($modulePath) . "\\Http\\Controllers\\{$studly}Controller;
-";
+                    // Add use statement for the entity API controller
+                    $useStatement = "use App\\Modules\\{$moduleStudly}\\Http\\Controllers\\Api\\{$studly}Controller;\n";
                     // Check if use statement already exists
                     if (strpos($apiRouteContent, $useStatement) === false) {
                         // Find the position to insert the use statement (after the last use statement)
                         $lastUsePosition = strrpos($apiRouteContent, "use ");
                         if ($lastUsePosition !== false) {
                             // Find the end of the use statement line
-                            $endOfUseLine = strpos($apiRouteContent, ";
-", $lastUsePosition);
+                            $endOfUseLine = strpos($apiRouteContent, ";\n", $lastUsePosition);
                             if ($endOfUseLine !== false) {
                                 $apiRouteContent = substr_replace($apiRouteContent, $useStatement, $endOfUseLine + 2, 0);
                             }
@@ -207,8 +202,7 @@ Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.i
                     // Find the position to insert the new route (before the comment or at the end)
                     $insertPosition = strrpos($apiRouteContent, '// Entity routes will be added here');
                     if ($insertPosition !== false) {
-                        $newRoute = "Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('api.{$kebab}.index');
-";
+                        $newRoute = "Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('api.{$kebab}.index');\n";
                         $apiRouteContent = substr_replace($apiRouteContent, $newRoute, $insertPosition, 0);
                         File::put($apiRoutePath, $apiRouteContent);
                         $this->line("  - <info>Added route to api.php</info>");
@@ -216,9 +210,7 @@ Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.i
                         // Fallback: add before the closing PHP tag
                         $insertPosition = strrpos($apiRouteContent, '?>');
                         if ($insertPosition !== false) {
-                            $newRoute = "
-Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('api.{$kebab}.index');
-";
+                            $newRoute = "\nRoute::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('api.{$kebab}.index');\n";
                             $apiRouteContent = substr_replace($apiRouteContent, $newRoute, $insertPosition, 0);
                             File::put($apiRoutePath, $apiRouteContent);
                             $this->line("  - <info>Added route to api.php</info>");
