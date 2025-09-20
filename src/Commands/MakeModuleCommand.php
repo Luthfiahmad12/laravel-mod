@@ -84,7 +84,7 @@ class MakeModuleCommand extends Command
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
             'api-route.stub'        => "Routes/api.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/{$kebab}s/index.blade.php", // View dalam folder plural
+            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module (bukan plural)
         ] : [
             'controller.stub'       => "Http/Controllers/{$studly}Controller.php",
             'model.stub'            => "Models/{$studly}.php",
@@ -93,7 +93,7 @@ class MakeModuleCommand extends Command
             'service.stub'          => "Services/{$studly}Service.php",
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/{$kebab}s/index.blade.php", // View dalam folder plural
+            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module (bukan plural)
         ];
 
         // Tambahkan Livewire stubs jika Livewire tersedia

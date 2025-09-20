@@ -17,6 +17,6 @@ class {{ModuleName}}Controller extends Controller
      */
     public function index()
     {
-        return view('{{ModuleNameKebab}}::{{ModuleNameKebab}}s.index');
+        return view('{{ModuleNameKebab}}::{{ModuleNameKebab}}.index');
     }
 }
