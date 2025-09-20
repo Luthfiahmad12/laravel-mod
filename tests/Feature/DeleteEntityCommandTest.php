@@ -47,7 +47,7 @@ class DeleteEntityCommandTest extends TestCase
         // Mock confirmation and delete entity
         $this->artisan('mod:delete-entity', ['module' => 'TestModule', 'entity' => 'Post'])
             ->expectsConfirmation('Are you sure you want to delete the entity Post from module TestModule? This action cannot be undone.', 'yes')
-            ->expectsOutput('✅ Entity Post deleted successfully from module TestModule!')
+            ->expectsOutput('Entity Post deleted successfully from module TestModule!')
             ->assertExitCode(0);
             
         // Assert entity files are deleted

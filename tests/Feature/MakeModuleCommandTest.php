@@ -39,7 +39,7 @@ class MakeModuleCommandTest extends TestCase
     public function it_can_create_a_new_module()
     {
         $this->artisan('mod:make', ['name' => 'TestModule'])
-            ->expectsOutput('✅ Module TestModule generated successfully!')
+            ->expectsOutput('Module TestModule generated successfully!')
             ->assertExitCode(0);
             
         // Assert module directory is created
@@ -82,7 +82,7 @@ class MakeModuleCommandTest extends TestCase
         }
         
         $this->artisan('mod:make', ['name' => 'TestApiModule', '--api' => true])
-            ->expectsOutput('✅ Module TestApiModule generated successfully! (API)')
+            ->expectsOutput('Module TestApiModule generated successfully! (API)')
             ->assertExitCode(0);
             
         // Assert API structure

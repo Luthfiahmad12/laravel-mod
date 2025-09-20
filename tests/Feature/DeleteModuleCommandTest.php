@@ -41,7 +41,7 @@ class DeleteModuleCommandTest extends TestCase
         // Mock confirmation
         $this->artisan('mod:delete-module', ['name' => 'TestModule'])
             ->expectsConfirmation('Are you sure you want to delete the module TestModule? This action cannot be undone.', 'yes')
-            ->expectsOutput('✅ Module TestModule deleted successfully!')
+            ->expectsOutput('Module TestModule deleted successfully!')
             ->assertExitCode(0);
             
         // Assert module is deleted

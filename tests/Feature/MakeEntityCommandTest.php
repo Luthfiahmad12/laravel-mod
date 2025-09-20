@@ -44,7 +44,7 @@ class MakeEntityCommandTest extends TestCase
         
         // Create entity
         $this->artisan('mod:make-entity', ['module' => 'TestModule', 'name' => 'Post'])
-            ->expectsOutput('✅ Entity Post created successfully in module TestModule!')
+            ->expectsOutput('Entity Post created successfully in module TestModule!')
             ->assertExitCode(0);
             
         // Assert entity files are created
@@ -53,7 +53,7 @@ class MakeEntityCommandTest extends TestCase
         $this->assertTrue(file_exists(base_path('modules/TestModule/Http/Requests/PostRequest.php')));
         $this->assertTrue(file_exists(base_path('modules/TestModule/Services/PostService.php')));
         // Route is now added to main route file, not created as separate file
-        $this->assertTrue(file_exists(base_path('modules/TestModule/Views/index.blade.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Views/posts/index.blade.php')));
     }
     
     /** @test */
@@ -82,7 +82,7 @@ class MakeEntityCommandTest extends TestCase
         
         // Create API entity
         $this->artisan('mod:make-entity', ['module' => 'TestApiModule', 'name' => 'Post', '--api' => true])
-            ->expectsOutput('✅ Entity Post created successfully in module TestApiModule! (API)')
+            ->expectsOutput('Entity Post created successfully in module TestApiModule! (API)')
             ->assertExitCode(0);
             
         // Assert API entity files are created
@@ -92,6 +92,6 @@ class MakeEntityCommandTest extends TestCase
         $this->assertTrue(file_exists(base_path('modules/TestApiModule/Http/Requests/PostRequest.php')));
         $this->assertTrue(file_exists(base_path('modules/TestApiModule/Services/PostService.php')));
         // Route is now added to main route file, not created as separate file
-        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Views/index.blade.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Views/posts/index.blade.php')));
     }
 }
