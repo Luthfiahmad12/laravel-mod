@@ -1,7 +1,7 @@
 # Laravel Mod
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-mod/core.svg?style=flat-square)](https://packagist.org/packages/laravel-mod/core)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/Luthfiahmad12/laravel-mod/Tests?label=tests)](https://github.com/Luthfiahmad12/laravel-mod/actions?query=workflow%3ATests+branch%3Amain)
+[![Tests](https://github.com/Luthfiahmad12/laravel-mod/actions/workflows/tests.yml/badge.svg)](https://github.com/Luthfiahmad12/laravel-mod/actions/workflows/tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel-mod/core.svg?style=flat-square)](https://packagist.org/packages/laravel-mod/core)
 
 A **lite modular package** for Laravel that helps you organize your application into clean, maintainable modules without the complexity of large modular systems.
