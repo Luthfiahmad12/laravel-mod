@@ -4,8 +4,6 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/Luthfiahmad12/laravel-mod/Tests?label=tests)](https://github.com/Luthfiahmad12/laravel-mod/actions?query=workflow%3ATests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel-mod/core.svg?style=flat-square)](https://packagist.org/packages/laravel-mod/core)
 
-> **Note**: Badges above will show actual values after the package is published to Packagist and GitHub Actions workflow runs successfully.
-
 A **lite modular package** for Laravel that helps you organize your application into clean, maintainable modules without the complexity of large modular systems.
 
 Perfect for small to medium projects that still want maintainable code.
