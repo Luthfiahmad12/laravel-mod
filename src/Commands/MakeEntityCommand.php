@@ -71,6 +71,12 @@ class MakeEntityCommand extends Command
 
         // Add Livewire components if Livewire is available
         if (class_exists('Livewire\Component')) {
+            // Ensure Livewire directory exists
+            $livewireDir = $modulePath . '/Livewire';
+            if (!File::exists($livewireDir)) {
+                File::ensureDirectoryExists($livewireDir, 0755);
+            }
+            
             $files['livewire.stub'] = "Livewire/{$studly}Component.php";
             $files['view-livewire.stub'] = "Views/livewire/{$kebab}-component.blade.php";
         }
@@ -131,6 +137,23 @@ class MakeEntityCommand extends Command
             
             // Check if route already exists
             if (strpos($webRouteContent, "Route::get('/{$kebab}'") === false) {
+                // Add use statement for the entity controller
+                $useStatement = "use App\\Modules\\" . basename($modulePath) . "\\Http\\Controllers\\{$studly}Controller;
+";
+                // Check if use statement already exists
+                if (strpos($webRouteContent, $useStatement) === false) {
+                    // Find the position to insert the use statement (after the last use statement)
+                    $lastUsePosition = strrpos($webRouteContent, "use ");
+                    if ($lastUsePosition !== false) {
+                        // Find the end of the use statement line
+                        $endOfUseLine = strpos($webRouteContent, ";
+", $lastUsePosition);
+                        if ($endOfUseLine !== false) {
+                            $webRouteContent = substr_replace($webRouteContent, $useStatement, $endOfUseLine + 2, 0);
+                        }
+                    }
+                }
+                
                 // Find the position to insert the new route (before the comment or at the end)
                 $insertPosition = strrpos($webRouteContent, '// Entity routes will be added here');
                 if ($insertPosition !== false) {
@@ -162,6 +185,23 @@ Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.i
                 
                 // Check if route already exists
                 if (strpos($apiRouteContent, "Route::get('/{$kebab}'") === false) {
+                    // Add use statement for the entity controller
+                    $useStatement = "use App\\Modules\\" . basename($modulePath) . "\\Http\\Controllers\\{$studly}Controller;
+";
+                    // Check if use statement already exists
+                    if (strpos($apiRouteContent, $useStatement) === false) {
+                        // Find the position to insert the use statement (after the last use statement)
+                        $lastUsePosition = strrpos($apiRouteContent, "use ");
+                        if ($lastUsePosition !== false) {
+                            // Find the end of the use statement line
+                            $endOfUseLine = strpos($apiRouteContent, ";
+", $lastUsePosition);
+                            if ($endOfUseLine !== false) {
+                                $apiRouteContent = substr_replace($apiRouteContent, $useStatement, $endOfUseLine + 2, 0);
+                            }
+                        }
+                    }
+                    
                     // Find the position to insert the new route (before the comment or at the end)
                     $insertPosition = strrpos($apiRouteContent, '// Entity routes will be added here');
                     if ($insertPosition !== false) {

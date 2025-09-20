@@ -56,7 +56,8 @@ class MakeModuleCommand extends Command
             'Routes',
             'Migrations',
             'Views',
-            'Livewire',
+            // Tambahkan Livewire folder jika Livewire tersedia
+            class_exists('Livewire\Component') ? 'Livewire' : null,
         ];
 
         // Filter null values
