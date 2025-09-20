@@ -24,7 +24,8 @@ class MakeModuleCommand extends Command
         $studly = Str::studly($input);
         $kebab = Str::kebab($studly);
         $snake = Str::snake($studly);
-        $snakePlural = Str::snake(Str::plural($studly));
+        $snakePlural = Str::snake(Str::plural($studly)); // Untuk migration
+        $kebabPlural = Str::kebab(Str::plural($studly)); // Untuk view folder
 
         $modulePath = base_path("modules/{$studly}");
 
@@ -44,6 +45,9 @@ class MakeModuleCommand extends Command
             'Providers',
             'Routes',
             'Migrations',
+            'Views', // Tambahkan Views untuk API juga
+            // Tambahkan Livewire folder jika Livewire tersedia
+            class_exists('Livewire\Component') ? 'Livewire' : null,
         ] : [
             'Http/Controllers',
             'Http/Requests',
@@ -53,6 +57,7 @@ class MakeModuleCommand extends Command
             'Routes',
             'Migrations',
             'Views',
+            // Tambahkan Livewire folder jika Livewire tersedia
             class_exists('Livewire\Component') ? 'Livewire' : null,
         ];
 
@@ -68,9 +73,10 @@ class MakeModuleCommand extends Command
             '{{ModuleName}}' => $studly,
             '{{moduleName}}' => Str::camel($studly),
             '{{ModuleNameKebab}}' => $kebab,
+            '{{ModuleNameKebabPlural}}' => $kebabPlural, // Tambahkan untuk view folder
             '{{ModuleNameSnake}}' => $snake,
             '{{ModuleNameSnakePlural}}' => $snakePlural,
-            '{{ModuleNamespace}}' => "App\\Modules\\{$studly}",
+            '{{ModuleNamespace}}' => "App\Modules\{$studly}",
         ];
 
         // Untuk API module, tetap buat controller dan route web juga
@@ -84,7 +90,7 @@ class MakeModuleCommand extends Command
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
             'api-route.stub'        => "Routes/api.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module (bukan plural)
+            'view.stub'             => "Views/{$kebabPlural}/index.blade.php", // View dalam folder plural yang benar
         ] : [
             'controller.stub'       => "Http/Controllers/{$studly}Controller.php",
             'model.stub'            => "Models/{$studly}.php",
@@ -93,7 +99,7 @@ class MakeModuleCommand extends Command
             'service.stub'          => "Services/{$studly}Service.php",
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module (bukan plural)
+            'view.stub'             => "Views/{$kebabPlural}/index.blade.php", // View dalam folder plural yang benar
         ];
 
         // Tambahkan Livewire stubs jika Livewire tersedia

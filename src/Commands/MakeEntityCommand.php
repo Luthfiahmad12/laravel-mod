@@ -28,7 +28,8 @@ class MakeEntityCommand extends Command
         $studly = Str::studly($name);
         $kebab = Str::kebab($studly);
         $snake = Str::snake($studly);
-        $snakePlural = Str::snake(Str::plural($studly));
+        $snakePlural = Str::snake(Str::plural($studly)); // Untuk migration
+        $kebabPlural = Str::kebab(Str::plural($studly)); // Untuk view folder
 
         // Check if entity already exists (main model)
         $modelPath = $modulePath . '/Models/' . $studly . '.php';
@@ -42,9 +43,10 @@ class MakeEntityCommand extends Command
             '{{ModuleName}}' => $studly,
             '{{moduleName}}' => Str::camel($studly),
             '{{ModuleNameKebab}}' => $kebab,
+            '{{ModuleNameKebabPlural}}' => $kebabPlural, // Tambahkan untuk view folder
             '{{ModuleNameSnake}}' => $snake,
             '{{ModuleNameSnakePlural}}' => $snakePlural,
-            '{{ModuleNamespace}}' => "App\\Modules\\{$module}",
+            '{{ModuleNamespace}}' => "App\Modules\{{$module}}",
         ];
 
         // Get stub path
@@ -57,14 +59,14 @@ class MakeEntityCommand extends Command
             'request.stub' => "Http/Requests/{$studly}Request.php",
             'controller.stub' => "Http/Controllers/{$studly}Controller.php", // Tambahkan web controller
             'api-controller.stub' => "Http/Controllers/Api/{$studly}Controller.php",
-            'view.stub' => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama entity (bukan plural)
+            'view.stub' => "Views/{$kebabPlural}/index.blade.php", // View dalam folder plural yang benar
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'service.stub' => "Services/{$studly}Service.php",
         ] : [
             'model.stub' => "Models/{$studly}.php",
             'request.stub' => "Http/Requests/{$studly}Request.php",
             'controller.stub' => "Http/Controllers/{$studly}Controller.php",
-            'view.stub' => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama entity (bukan plural)
+            'view.stub' => "Views/{$kebabPlural}/index.blade.php", // View dalam folder plural yang benar
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'service.stub' => "Services/{$studly}Service.php",
         ];
