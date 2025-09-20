@@ -103,13 +103,6 @@ class DeleteEntityCommand extends Command
             $deletedFiles[] = "Views/livewire/{$entityKebab}-component.blade.php";
         }
         
-        // Delete Livewire view if exists
-        $livewireViewPath = "{$modulePath}/Views/livewire/{$entityKebab}-component.blade.php";
-        if (File::exists($livewireViewPath)) {
-            File::delete($livewireViewPath);
-            $deletedFiles[] = "Views/livewire/{$entityKebab}-component.blade.php";
-        }
-        
         // Remove entity route from main route files
         $this->removeEntityRoute($modulePath, $entityKebab);
         
@@ -136,8 +129,7 @@ class DeleteEntityCommand extends Command
             $webRouteContent = File::get($webRoutePath);
             
             // Remove the entity route line
-            $pattern = '/Route::get\('\/' . $entityKebab . '', \[.*Controller::class, 'index'\]\)->name\('' . $entityKebab . '\.index'\);
-?/';
+            $pattern = '/Route::get\\(\'\\/' . $entityKebab . '\', \\[.*Controller::class, \'index\'\\]\\)->name\\(\'' . $entityKebab . '\\.index\'\\);\n?/';
             $webRouteContent = preg_replace($pattern, '', $webRouteContent);
             
             File::put($webRoutePath, $webRouteContent);
@@ -150,8 +142,7 @@ class DeleteEntityCommand extends Command
             $apiRouteContent = File::get($apiRoutePath);
             
             // Remove the entity route line
-            $pattern = '/Route::get\(\'\/' . $entityKebab . '\', \[.*Controller::class, \'index\'\]\)->name\(\'api\.' . $entityKebab . '\.index\'\);
-?/';
+            $pattern = '/Route::get\\(\'\\/' . $entityKebab . '\', \\[.*Controller::class, \'index\'\\]\\)->name\\(\'api\\.' . $entityKebab . '\\.index\'\\);\n?/';
             $apiRouteContent = preg_replace($pattern, '', $apiRouteContent);
             
             File::put($apiRoutePath, $apiRouteContent);
