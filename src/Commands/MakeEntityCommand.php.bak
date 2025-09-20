@@ -46,7 +46,7 @@ class MakeEntityCommand extends Command
             '{{ModuleNameKebabPlural}}' => $kebabPlural, // Tambahkan untuk view folder
             '{{ModuleNameSnake}}' => $snake,
             '{{ModuleNameSnakePlural}}' => $snakePlural,
-            '{{ModuleNamespace}}' => "App\\Modules\\{$module}",
+            '{{ModuleNamespace}}' => "App\Modules\{{$module}}",
         ];
 
         // Get stub path
