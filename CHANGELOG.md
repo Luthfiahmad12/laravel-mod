@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-09-20
+
+### Changed
+- Simplified route file structure: using `web.php` and `api.php` instead of `web-{entity}.php` and `api-{entity}.php`
+- Entity routes are now added to existing route files instead of creating new ones
+- Improved route addition and removal logic with proper placeholder comments
+- Updated tests and documentation to reflect new route structure
+- Enhanced Livewire handling consistency across commands
+
+### Fixed
+- Fixed Livewire component generation when Livewire is not installed
+- Fixed file creation errors when creating modules with Livewire
+- Improved error handling for file operations
+
+## [1.1.0] - 2024-04-15
+
 ### Added
 - Initial release of Laravel Mod package
 - Module generation with `mod:make` command
