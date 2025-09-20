@@ -86,18 +86,8 @@ class DeleteEntityCommand extends Command
             $deletedFiles[] = "Views/{$entityKebab}/";
         }
         
-        // Delete route files
-        $webRoutePath = "{$modulePath}/Routes/web-{$entityKebab}.php";
-        if (File::exists($webRoutePath)) {
-            File::delete($webRoutePath);
-            $deletedFiles[] = "Routes/web-{$entityKebab}.php";
-        }
-        
-        $apiRoutePath = "{$modulePath}/Routes/api-{$entityKebab}.php";
-        if (File::exists($apiRoutePath)) {
-            File::delete($apiRoutePath);
-            $deletedFiles[] = "Routes/api-{$entityKebab}.php";
-        }
+        // Note: Route files are no longer deleted individually as they are consolidated
+        // Entity routes are removed from the main route files instead
         
         // Delete Livewire component if exists
         $livewirePath = "{$modulePath}/Livewire/{$entityStudly}Component.php";
@@ -113,6 +103,16 @@ class DeleteEntityCommand extends Command
             $deletedFiles[] = "Views/livewire/{$entityKebab}-component.blade.php";
         }
         
+        // Delete Livewire view if exists
+        $livewireViewPath = "{$modulePath}/Views/livewire/{$entityKebab}-component.blade.php";
+        if (File::exists($livewireViewPath)) {
+            File::delete($livewireViewPath);
+            $deletedFiles[] = "Views/livewire/{$entityKebab}-component.blade.php";
+        }
+        
+        // Remove entity route from main route files
+        $this->removeEntityRoute($modulePath, $entityKebab);
+        
         if (empty($deletedFiles)) {
             $this->warn("No files found for entity {$entityStudly} in module {$moduleStudly}.");
         } else {
@@ -123,5 +123,39 @@ class DeleteEntityCommand extends Command
         }
         
         return self::SUCCESS;
+    }
+
+    /**
+     * Remove entity route from main route files
+     */
+    protected function removeEntityRoute(string $modulePath, string $entityKebab): void
+    {
+        // For web routes
+        $webRoutePath = $modulePath . '/Routes/web.php';
+        if (File::exists($webRoutePath)) {
+            $webRouteContent = File::get($webRoutePath);
+            
+            // Remove the entity route line
+            $pattern = '/Route::get\('\/' . $entityKebab . '', \[.*Controller::class, 'index'\]\)->name\('' . $entityKebab . '\.index'\);
+?/';
+            $webRouteContent = preg_replace($pattern, '', $webRouteContent);
+            
+            File::put($webRoutePath, $webRouteContent);
+            $this->line("  └── 🔄 <info>Removed route from web.php</info>");
+        }
+
+        // For API routes (if exists)
+        $apiRoutePath = $modulePath . '/Routes/api.php';
+        if (File::exists($apiRoutePath)) {
+            $apiRouteContent = File::get($apiRoutePath);
+            
+            // Remove the entity route line
+            $pattern = '/Route::get\(\'\/' . $entityKebab . '\', \[.*Controller::class, \'index\'\]\)->name\(\'api\.' . $entityKebab . '\.index\'\);
+?/';
+            $apiRouteContent = preg_replace($pattern, '', $apiRouteContent);
+            
+            File::put($apiRoutePath, $apiRouteContent);
+            $this->line("  └── 🔄 <info>Removed route from api.php</info>");
+        }
     }
 }

@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use {{ModuleNamespace}}\Http\Controllers\Api\{{ModuleName}}Controller;
 
-/**
- * API Routes for the {{ModuleName}} entity
+/*
+ * API Routes for {{ModuleName}} Module
  */
 
-Route::get('/', [{{ModuleName}}Controller::class, 'index'])->name('{{ModuleNameKebab}}.index');
+Route::get('/', [{{ModuleName}}Controller::class, 'index'])->name('api.{{ModuleNameKebab}}.index');
+
+// Entity routes will be added here

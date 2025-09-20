@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\File;
 
 class MakeEntityCommand extends Command
 {
-    protected $signature = 'mod:make-entity {module} {name} {--api : Generate API resources instead of web resources}';
-    protected $description = 'Generate a new entity (with all components) within an existing module';
+    protected $signature = 'mod:make-entity {module} {name} {--api : Generate API resources in addition to web resources}';
+    protected $description = 'Generate a new entity (with all components) within an existing module with optional API resources';
 
     public function handle(): int
     {
@@ -21,20 +21,6 @@ class MakeEntityCommand extends Command
         $modulePath = base_path("modules/{$module}");
         if (!File::exists($modulePath)) {
             $this->error("Module {$module} does not exist!");
-            return self::INVALID;
-        }
-
-        // Check if API module
-        $isApiModule = File::exists($modulePath . '/Http/Controllers/Api');
-        
-        // Validate API flag consistency
-        if ($isApi && !$isApiModule) {
-            $this->error("Module {$module} is not an API module. Please remove the --api flag or create an API module first.");
-            return self::INVALID;
-        }
-        
-        if (!$isApi && $isApiModule) {
-            $this->error("Module {$module} is an API module. Please use the --api flag.");
             return self::INVALID;
         }
 
@@ -65,11 +51,12 @@ class MakeEntityCommand extends Command
         $stubPath = __DIR__ . '/../../stubs/';
         
         // Define files to generate based on module type
+        // Untuk API module, tetap buat controller dan route web juga
         $files = $isApi ? [
             'model.stub' => "Models/{$studly}.php",
             'request.stub' => "Http/Requests/{$studly}Request.php",
+            'controller.stub' => "Http/Controllers/{$studly}Controller.php", // Tambahkan web controller
             'api-controller.stub' => "Http/Controllers/Api/{$studly}Controller.php",
-            'api-route.stub' => "Routes/api-{$kebab}.php",
             'view.stub' => "Views/index.blade.php",
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'service.stub' => "Services/{$studly}Service.php",
@@ -77,14 +64,13 @@ class MakeEntityCommand extends Command
             'model.stub' => "Models/{$studly}.php",
             'request.stub' => "Http/Requests/{$studly}Request.php",
             'controller.stub' => "Http/Controllers/{$studly}Controller.php",
-            'route.stub' => "Routes/web-{$kebab}.php",
             'view.stub' => "Views/index.blade.php",
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'service.stub' => "Services/{$studly}Service.php",
         ];
 
-        // Add Livewire components if not API and Livewire is available
-        if (!$isApi && class_exists('Livewire\Component')) {
+        // Add Livewire components if Livewire is available
+        if (class_exists('Livewire\Component')) {
             $files['livewire.stub'] = "Livewire/{$studly}Component.php";
             $files['view-livewire.stub'] = "Views/livewire/{$kebab}-component.blade.php";
         }
@@ -94,13 +80,9 @@ class MakeEntityCommand extends Command
         foreach ($files as $stub => $target) {
             $source = $stubPath . $stub;
             
-            // Check if it's a web-only stub for API modules
-            if ($isApi && (strpos($stub, 'view') !== false || strpos($stub, 'livewire') !== false)) {
-                continue;
-            }
-            
             // Check if it's a Livewire stub but Livewire not available
             if (strpos($stub, 'livewire') !== false && !class_exists('Livewire\Component')) {
+                $this->warn("⚠️ Livewire not installed. Skipping {$studly}Component.");
                 continue;
             }
             
@@ -109,14 +91,19 @@ class MakeEntityCommand extends Command
                 continue;
             }
 
-            // Ensure directory exists
+            $content = str_replace(array_keys($replacements), array_values($replacements), File::get($source));
+            
+            // Ensure target directory exists before writing
             $targetDir = dirname($modulePath . '/' . $target);
             if (!File::exists($targetDir)) {
                 File::ensureDirectoryExists($targetDir, 0755);
             }
-
-            $content = str_replace(array_keys($replacements), array_values($replacements), File::get($source));
-            File::put($modulePath . '/' . $target, $content);
+            
+            // Write file content
+            if (File::put($modulePath . '/' . $target, $content) === false) {
+                $this->warn("⚠️ Failed to create file: {$target}");
+                continue;
+            }
             $generatedFiles[] = $target;
         }
 
@@ -126,6 +113,77 @@ class MakeEntityCommand extends Command
             $this->line("  └── 📄 <info>{$file}</info>");
         }
 
+        // Add entity route to existing route files
+        $this->addEntityRoute($modulePath, $studly, $kebab, $isApi);
+
         return self::SUCCESS;
+    }
+
+    /**
+     * Add entity route to existing route files
+     */
+    protected function addEntityRoute(string $modulePath, string $studly, string $kebab, bool $isApi): void
+    {
+        // For web routes
+        $webRoutePath = $modulePath . '/Routes/web.php';
+        if (File::exists($webRoutePath)) {
+            $webRouteContent = File::get($webRoutePath);
+            
+            // Check if route already exists
+            if (strpos($webRouteContent, "Route::get('/{$kebab}'") === false) {
+                // Find the position to insert the new route (before the comment or at the end)
+                $insertPosition = strrpos($webRouteContent, '// Entity routes will be added here');
+                if ($insertPosition !== false) {
+                    $newRoute = "Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.index');
+";
+                    $webRouteContent = substr_replace($webRouteContent, $newRoute, $insertPosition, 0);
+                    File::put($webRoutePath, $webRouteContent);
+                    $this->line("  └── 🔄 <info>Added route to web.php</info>");
+                } else {
+                    // Fallback: add before the closing PHP tag
+                    $insertPosition = strrpos($webRouteContent, '?>');
+                    if ($insertPosition !== false) {
+                        $newRoute = "
+Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('{$kebab}.index');
+";
+                        $webRouteContent = substr_replace($webRouteContent, $newRoute, $insertPosition, 0);
+                        File::put($webRoutePath, $webRouteContent);
+                        $this->line("  └── 🔄 <info>Added route to web.php</info>");
+                    }
+                }
+            }
+        }
+
+        // For API routes
+        if ($isApi) {
+            $apiRoutePath = $modulePath . '/Routes/api.php';
+            if (File::exists($apiRoutePath)) {
+                $apiRouteContent = File::get($apiRoutePath);
+                
+                // Check if route already exists
+                if (strpos($apiRouteContent, "Route::get('/{$kebab}'") === false) {
+                    // Find the position to insert the new route (before the comment or at the end)
+                    $insertPosition = strrpos($apiRouteContent, '// Entity routes will be added here');
+                    if ($insertPosition !== false) {
+                        $newRoute = "Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('api.{$kebab}.index');
+";
+                        $apiRouteContent = substr_replace($apiRouteContent, $newRoute, $insertPosition, 0);
+                        File::put($apiRoutePath, $apiRouteContent);
+                        $this->line("  └── 🔄 <info>Added route to api.php</info>");
+                    } else {
+                        // Fallback: add before the closing PHP tag
+                        $insertPosition = strrpos($apiRouteContent, '?>');
+                        if ($insertPosition !== false) {
+                            $newRoute = "
+Route::get('/{$kebab}', [{$studly}Controller::class, 'index'])->name('api.{$kebab}.index');
+";
+                            $apiRouteContent = substr_replace($apiRouteContent, $newRoute, $insertPosition, 0);
+                            File::put($apiRoutePath, $apiRouteContent);
+                            $this->line("  └── 🔄 <info>Added route to api.php</info>");
+                        }
+                    }
+                }
+            }
+        }
     }
 }

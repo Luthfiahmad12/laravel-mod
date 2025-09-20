@@ -130,7 +130,7 @@ modules/
     ├── Providers/
     │   └── ModuleNameServiceProvider.php
     ├── Routes/
-    │   └── web-*.php
+    │   └── web.php
     ├── Views/
     ├── Migrations/
     └── Livewire/ (if installed)
@@ -150,7 +150,8 @@ modules/
     ├── Providers/
     │   └── ModuleNameServiceProvider.php
     ├── Routes/
-    │   └── api-*.php
+    │   ├── web.php
+    │   └── api.php
     ├── Views/
     └── Migrations/
 ```
@@ -166,7 +167,9 @@ When you create a module, the following components are automatically generated:
 3. **Request** - Empty form request for validation
 4. **Service** - Empty service class with placeholder comment
 5. **Service Provider** - For registering module-specific services
-6. **Routes** - Single route file with `index` route only
+6. **Routes** - Single route file with `index` route only:
+   - Web routes: `web.php`
+   - API routes: `api.php`
 7. **Views** - Single `index.blade.php` view file
 8. **Migrations** - Standard Laravel migration file
 
@@ -174,8 +177,8 @@ When you create a module, the following components are automatically generated:
 
 All routes follow a consistent naming pattern:
 
--   Web routes: `web-entity.php` (e.g., `web-post.php`)
--   API routes: `api-entity.php` (e.g., `api-post.php`)
+-   Web routes: `web.php`
+-   API routes: `api.php`
 -   Route names: `entity.index` (e.g., `post.index`)
 
 ## 🛠 API Module Features
@@ -192,7 +195,7 @@ The generated API controller includes only the standard `index()` method:
 
 -   `index()` - Get a collection of resources
 
-Route files are named dynamically (`api-{entity}.php`) for better organization.
+Route files are named simply as `web.php` and `api.php` for better organization.
 
 ## 🛠 Module Service Provider
 

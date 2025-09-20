@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\File;
 
 class MakeModuleCommand extends Command
 {
-    protected $signature = 'mod:make {name} {--api : Generate API resources instead of web resources}';
-    protected $description = 'Generate a new module with optional API resources';
+    protected $signature = 'mod:make {name} {--api : Generate API resources in addition to web resources}';
+    protected $description = 'Generate a new module with optional API resources in addition to web resources';
 
     public function handle(): int
     {
@@ -34,7 +34,9 @@ class MakeModuleCommand extends Command
         }
 
         // Buat struktur folder
+        // Untuk API module, tetap buat folder web controller juga
         $folders = $isApi ? [
+            'Http/Controllers', // Tambahkan folder web controller
             'Http/Controllers/Api',
             'Http/Requests',
             'Models',
@@ -43,6 +45,8 @@ class MakeModuleCommand extends Command
             'Routes',
             'Migrations',
             'Views', // Tambahkan Views untuk API juga
+            // Tambahkan Livewire folder jika Livewire tersedia
+            class_exists('Livewire\Component') ? 'Livewire' : null,
         ] : [
             'Http/Controllers',
             'Http/Requests',
@@ -54,6 +58,9 @@ class MakeModuleCommand extends Command
             'Views',
             'Livewire',
         ];
+
+        // Filter null values
+        $folders = array_filter($folders);
 
         foreach ($folders as $folder) {
             File::ensureDirectoryExists($modulePath . '/' . $folder, 0755);
@@ -69,14 +76,17 @@ class MakeModuleCommand extends Command
             '{{ModuleNamespace}}' => "App\\Modules\\{$studly}",
         ];
 
+        // Untuk API module, tetap buat controller dan route web juga
         $stubs = $isApi ? [
+            'controller.stub'       => "Http/Controllers/{$studly}Controller.php", // Tambahkan web controller
             'api-controller.stub'   => "Http/Controllers/Api/{$studly}Controller.php",
             'model.stub'            => "Models/{$studly}.php",
             'migration.stub'        => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'request.stub'          => "Http/Requests/{$studly}Request.php",
             'service.stub'          => "Services/{$studly}Service.php",
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
-            'api-route.stub'        => "Routes/api-{$kebab}.php",
+            'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
+            'api-route.stub'        => "Routes/api.php", // Nama file lebih sederhana
             'view.stub'             => "Views/index.blade.php",
         ] : [
             'controller.stub'       => "Http/Controllers/{$studly}Controller.php",
@@ -85,12 +95,12 @@ class MakeModuleCommand extends Command
             'request.stub'          => "Http/Requests/{$studly}Request.php",
             'service.stub'          => "Services/{$studly}Service.php",
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
-            'route.stub'            => "Routes/web-{$kebab}.php",
+            'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
             'view.stub'             => "Views/index.blade.php",
         ];
 
-        // Tambahkan Livewire stubs jika bukan API dan Livewire tersedia
-        if (!$isApi && class_exists('Livewire\Component')) {
+        // Tambahkan Livewire stubs jika Livewire tersedia
+        if (class_exists('Livewire\Component')) {
             $stubs['livewire.stub'] = "Livewire/{$studly}Component.php";
             $stubs['view-livewire.stub'] = "Views/livewire/{$kebab}-component.blade.php";
         }
@@ -98,8 +108,8 @@ class MakeModuleCommand extends Command
         $stubPath = __DIR__ . '/../../stubs/';
 
         foreach ($stubs as $stub => $target) {
-            // Skip Livewire for API modules
-            if ($isApi && (strpos($stub, 'livewire') !== false)) {
+            // Skip Livewire for API modules if Livewire is not installed
+            if ($isApi && (strpos($stub, 'livewire') !== false) && !class_exists('Livewire\Component')) {
                 continue;
             }
 
@@ -118,13 +128,25 @@ class MakeModuleCommand extends Command
             }
 
             $content = str_replace(array_keys($replacements), array_values($replacements), File::get($source));
-            File::put($targetPath, $content);
+            
+            // Ensure target directory exists before writing
+            $targetDir = dirname($targetPath);
+            if (!File::exists($targetDir)) {
+                File::ensureDirectoryExists($targetDir, 0755);
+            }
+            
+            // Write file content
+            if (File::put($targetPath, $content) === false) {
+                $this->warn("⚠️ Failed to create file: {$target}");
+                continue;
+            }
             $this->line("  └── 📄 <info>{$target}</info>");
         }
 
         $this->newLine();
         $this->info("✅ Module <comment>{$studly}</comment> generated successfully!" . ($isApi ? " (API)" : ""));
         $this->newLine();
+        
         return self::SUCCESS;
     }
 

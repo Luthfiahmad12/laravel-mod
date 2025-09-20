@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use {{ModuleNamespace}}\Http\Controllers\{{ModuleName}}Controller;
 
-/**
- * Routes for the {{ModuleName}} entity
+/*
+ * Web Routes for {{ModuleName}} Module
  */
 
 Route::get('/', [{{ModuleName}}Controller::class, 'index'])->name('{{ModuleNameKebab}}.index');
+
+// Entity routes will be added here

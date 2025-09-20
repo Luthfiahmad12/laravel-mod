@@ -87,6 +87,6 @@ class MakeModuleCommandTest extends TestCase
             
         // Assert API structure
         $this->assertTrue(is_dir(base_path('modules/TestApiModule/Http/Controllers/Api')));
-        $this->assertFileExists(base_path('modules/TestApiModule/Routes/api-test-api-module.php'));
+        $this->assertFileExists(base_path('modules/TestApiModule/Routes/api.php'));
     }
 }

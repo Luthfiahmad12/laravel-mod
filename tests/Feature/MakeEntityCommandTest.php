@@ -52,7 +52,7 @@ class MakeEntityCommandTest extends TestCase
         $this->assertTrue(file_exists(base_path('modules/TestModule/Http/Controllers/PostController.php')));
         $this->assertTrue(file_exists(base_path('modules/TestModule/Http/Requests/PostRequest.php')));
         $this->assertTrue(file_exists(base_path('modules/TestModule/Services/PostService.php')));
-        $this->assertTrue(file_exists(base_path('modules/TestModule/Routes/web-post.php')));
+        // Route is now added to main route file, not created as separate file
         $this->assertTrue(file_exists(base_path('modules/TestModule/Views/index.blade.php')));
     }
     
@@ -86,7 +86,12 @@ class MakeEntityCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert API entity files are created
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Models/Post.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Http/Controllers/PostController.php')));
         $this->assertTrue(file_exists(base_path('modules/TestApiModule/Http/Controllers/Api/PostController.php')));
-        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Routes/api-post.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Http/Requests/PostRequest.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Services/PostService.php')));
+        // Route is now added to main route file, not created as separate file
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Views/index.blade.php')));
     }
 }
