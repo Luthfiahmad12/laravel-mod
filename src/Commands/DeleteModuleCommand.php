@@ -18,7 +18,7 @@ class DeleteModuleCommand extends Command
 
         // Validate module exists
         if (!File::exists($modulePath)) {
-            $this->fail("Module {$studly} does not exist!");
+            $this->line("Module {$studly} does not exist!");
             return self::INVALID;
         }
 

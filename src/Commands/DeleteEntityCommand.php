@@ -24,7 +24,7 @@ class DeleteEntityCommand extends Command
         
         // Validate module exists
         if (!File::exists($modulePath)) {
-            $this->fail("Module {$moduleStudly} does not exist!");
+            $this->line("Module {$moduleStudly} does not exist!");
             return self::INVALID;
         }
         

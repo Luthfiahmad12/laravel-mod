@@ -20,7 +20,7 @@ class MakeEntityCommand extends Command
         // Validate module exists
         $modulePath = base_path("modules/{$module}");
         if (!File::exists($modulePath)) {
-            $this->fail("Module {$module} does not exist!");
+            $this->line("Module {$module} does not exist!");
             return self::INVALID;
         }
 

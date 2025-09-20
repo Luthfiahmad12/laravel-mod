@@ -30,7 +30,7 @@ class MakeModuleCommand extends Command
         $modulePath = base_path("modules/{$studly}");
 
         if (File::exists($modulePath)) {
-            $this->fail("Module {$studly} already exists!");
+            $this->line("Module {$studly} already exists!");
             return self::INVALID;
         }
 
