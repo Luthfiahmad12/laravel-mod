@@ -57,14 +57,14 @@ class MakeEntityCommand extends Command
             'request.stub' => "Http/Requests/{$studly}Request.php",
             'controller.stub' => "Http/Controllers/{$studly}Controller.php", // Tambahkan web controller
             'api-controller.stub' => "Http/Controllers/Api/{$studly}Controller.php",
-            'view.stub' => "Views/index.blade.php",
+            'view.stub' => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama entity
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'service.stub' => "Services/{$studly}Service.php",
         ] : [
             'model.stub' => "Models/{$studly}.php",
             'request.stub' => "Http/Requests/{$studly}Request.php",
             'controller.stub' => "Http/Controllers/{$studly}Controller.php",
-            'view.stub' => "Views/index.blade.php",
+            'view.stub' => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama entity
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
             'service.stub' => "Services/{$studly}Service.php",
         ];

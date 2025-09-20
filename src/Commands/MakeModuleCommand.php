@@ -44,9 +44,6 @@ class MakeModuleCommand extends Command
             'Providers',
             'Routes',
             'Migrations',
-            'Views', // Tambahkan Views untuk API juga
-            // Tambahkan Livewire folder jika Livewire tersedia
-            class_exists('Livewire\Component') ? 'Livewire' : null,
         ] : [
             'Http/Controllers',
             'Http/Requests',
@@ -88,7 +85,7 @@ class MakeModuleCommand extends Command
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
             'api-route.stub'        => "Routes/api.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/index.blade.php",
+            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module
         ] : [
             'controller.stub'       => "Http/Controllers/{$studly}Controller.php",
             'model.stub'            => "Models/{$studly}.php",
@@ -97,7 +94,7 @@ class MakeModuleCommand extends Command
             'service.stub'          => "Services/{$studly}Service.php",
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/index.blade.php",
+            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module
         ];
 
         // Tambahkan Livewire stubs jika Livewire tersedia
@@ -129,13 +126,13 @@ class MakeModuleCommand extends Command
             }
 
             $content = str_replace(array_keys($replacements), array_values($replacements), File::get($source));
-            
+
             // Ensure target directory exists before writing
             $targetDir = dirname($targetPath);
             if (!File::exists($targetDir)) {
                 File::ensureDirectoryExists($targetDir, 0755);
             }
-            
+
             // Write file content
             if (File::put($targetPath, $content) === false) {
                 $this->warn("⚠️ Failed to create file: {$target}");
@@ -147,7 +144,7 @@ class MakeModuleCommand extends Command
         $this->newLine();
         $this->info("✅ Module <comment>{$studly}</comment> generated successfully!" . ($isApi ? " (API)" : ""));
         $this->newLine();
-        
+
         return self::SUCCESS;
     }
 
