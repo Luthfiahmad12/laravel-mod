@@ -13,16 +13,23 @@ class MakeEntityCommandTest extends TestCase
         parent::setUp();
         
         // Create modules directory if not exists
-        if (!File::exists(base_path('modules'))) {
-            File::makeDirectory(base_path('modules'));
+        $modulesPath = base_path('modules');
+        if (!File::exists($modulesPath)) {
+            File::makeDirectory($modulesPath, 0755, true);
         }
     }
     
     protected function tearDown(): void
     {
         // Clean up created modules
-        if (File::exists(base_path('modules/TestModule'))) {
-            File::deleteDirectory(base_path('modules/TestModule'));
+        $testModulePath = base_path('modules/TestModule');
+        if (File::exists($testModulePath)) {
+            File::deleteDirectory($testModulePath);
+        }
+        
+        $testApiModulePath = base_path('modules/TestApiModule');
+        if (File::exists($testApiModulePath)) {
+            File::deleteDirectory($testApiModulePath);
         }
         
         parent::tearDown();
@@ -32,7 +39,8 @@ class MakeEntityCommandTest extends TestCase
     public function it_can_create_entity_in_existing_module()
     {
         // Create module first
-        $this->artisan('mod:make', ['name' => 'TestModule']);
+        $this->artisan('mod:make', ['name' => 'TestModule'])
+            ->assertExitCode(0);
         
         // Create entity
         $this->artisan('mod:make-entity', ['module' => 'TestModule', 'name' => 'Post'])
@@ -40,12 +48,12 @@ class MakeEntityCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert entity files are created
-        $this->assertFileExists(base_path('modules/TestModule/Models/Post.php'));
-        $this->assertFileExists(base_path('modules/TestModule/Http/Controllers/PostController.php'));
-        $this->assertFileExists(base_path('modules/TestModule/Http/Requests/PostRequest.php'));
-        //$this->assertFileExists(base_path('modules/TestModule/Services/PostService.php')); // Commented out because service creation might be different
-        $this->assertFileExists(base_path('modules/TestModule/Routes/web-post.php'));
-        $this->assertFileExists(base_path('modules/TestModule/Views/index.blade.php'));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Models/Post.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Http/Controllers/PostController.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Http/Requests/PostRequest.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Services/PostService.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Routes/web-post.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Views/index.blade.php')));
     }
     
     /** @test */
@@ -69,7 +77,8 @@ class MakeEntityCommandTest extends TestCase
             return;
         }
         
-        $this->artisan('mod:make', ['name' => 'TestApiModule', '--api' => true]);
+        $this->artisan('mod:make', ['name' => 'TestApiModule', '--api' => true])
+            ->assertExitCode(0);
         
         // Create API entity
         $this->artisan('mod:make-entity', ['module' => 'TestApiModule', 'name' => 'Post', '--api' => true])
@@ -77,7 +86,7 @@ class MakeEntityCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert API entity files are created
-        $this->assertFileExists(base_path('modules/TestApiModule/Http/Controllers/Api/PostController.php'));
-        $this->assertFileExists(base_path('modules/TestApiModule/Routes/api-post.php'));
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Http/Controllers/Api/PostController.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestApiModule/Routes/api-post.php')));
     }
 }

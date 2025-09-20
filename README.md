@@ -4,13 +4,11 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/Luthfiahmad12/laravel-mod/Tests?label=tests)](https://github.com/Luthfiahmad12/laravel-mod/actions?query=workflow%3ATests+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel-mod/core.svg?style=flat-square)](https://packagist.org/packages/laravel-mod/core)
 
+> **Note**: Badges above will show actual values after the package is published to Packagist and GitHub Actions workflow runs successfully.
+
 A **lite modular package** for Laravel that helps you organize your application into clean, maintainable modules without the complexity of large modular systems.
 
 Perfect for small to medium projects that still want maintainable code.
-
-## 🙏 Credits
-
--   **[Achmad Luthfi Afif](https://github.com/Luthfiahmad12)**
 
 ## ✨ Features
 
@@ -59,10 +57,10 @@ First, install an API authentication package:
 
 ```bash
 # For Laravel Sanctum (recommended)
-composer require laravel/sanctum
+php artisan install:api
 
 # OR for Laravel Passport
-composer require laravel/passport
+php artisan install:api --passport
 ```
 
 Then generate the API module:
@@ -236,7 +234,7 @@ public function boot(): void
 -   Laravel Sanctum is recommended for most API applications
 -   All modules are automatically registered with Laravel's service container
 -   Entity generation automatically detects module type (web or API)
--   Livewire components are only generated if Livewire is installed
+-   Livewire components are automatically discovered and registered if Livewire is installed
 -   Route files are named dynamically for better organization
 -   Middleware is applied automatically by the service provider
 -   Package follows "less is more" philosophy - extend as needed

@@ -13,16 +13,18 @@ class DeleteModuleCommandTest extends TestCase
         parent::setUp();
         
         // Create modules directory if not exists
-        if (!File::exists(base_path('modules'))) {
-            File::makeDirectory(base_path('modules'));
+        $modulesPath = base_path('modules');
+        if (!File::exists($modulesPath)) {
+            File::makeDirectory($modulesPath, 0755, true);
         }
     }
     
     protected function tearDown(): void
     {
         // Clean up created modules
-        if (File::exists(base_path('modules/TestModule'))) {
-            File::deleteDirectory(base_path('modules/TestModule'));
+        $testModulePath = base_path('modules/TestModule');
+        if (File::exists($testModulePath)) {
+            File::deleteDirectory($testModulePath);
         }
         
         parent::tearDown();
@@ -32,8 +34,9 @@ class DeleteModuleCommandTest extends TestCase
     public function it_can_delete_existing_module()
     {
         // Create module first
-        $this->artisan('mod:make', ['name' => 'TestModule']);
-        $this->assertDirectoryExists(base_path('modules/TestModule'));
+        $this->artisan('mod:make', ['name' => 'TestModule'])
+            ->assertExitCode(0);
+        $this->assertTrue(is_dir(base_path('modules/TestModule')));
         
         // Mock confirmation
         $this->artisan('mod:delete-module', ['name' => 'TestModule'])
@@ -42,7 +45,7 @@ class DeleteModuleCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert module is deleted
-        $this->assertDirectoryDoesNotExist(base_path('modules/TestModule'));
+        $this->assertFalse(is_dir(base_path('modules/TestModule')));
     }
     
     /** @test */
@@ -57,8 +60,9 @@ class DeleteModuleCommandTest extends TestCase
     public function it_cancels_deletion_when_user_says_no()
     {
         // Create module first
-        $this->artisan('mod:make', ['name' => 'TestModule']);
-        $this->assertDirectoryExists(base_path('modules/TestModule'));
+        $this->artisan('mod:make', ['name' => 'TestModule'])
+            ->assertExitCode(0);
+        $this->assertTrue(is_dir(base_path('modules/TestModule')));
         
         // Mock cancellation
         $this->artisan('mod:delete-module', ['name' => 'TestModule'])
@@ -67,6 +71,6 @@ class DeleteModuleCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert module still exists
-        $this->assertDirectoryExists(base_path('modules/TestModule'));
+        $this->assertTrue(is_dir(base_path('modules/TestModule')));
     }
 }

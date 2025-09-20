@@ -133,9 +133,9 @@ class MakeModuleCommand extends Command
      */
     protected function checkApiDependencies(): bool
     {
-        // Check for Laravel Sanctum
+        // Check for Laravel Sanctum (included by default in Laravel 9+)
         if (class_exists('Laravel\Sanctum\Sanctum')) {
-            $this->info("✓ Sanctum detected");
+            $this->info("✓ Sanctum detected (included with Laravel 9+)");
             return true;
         }
 
@@ -146,23 +146,18 @@ class MakeModuleCommand extends Command
         }
 
         // Check for Tymon JWT Auth
-        if (class_exists('Tymon\JWTAuth\JWTAuth')) {
+        if (class_exists('Tymon\JWTAuth\Providers\LaravelServiceProvider') || class_exists('Tymon\JWTAuth\JWTAuth')) {
             $this->info("✓ JWT Auth detected");
             return true;
         }
 
         // Check for Laravel Airlock (older version of Sanctum)
         if (class_exists('Laravel\Airlock\Airlock')) {
-            $this->info("✓ Airlock detected");
+            $this->info("✓ Airlock detected (legacy)");
             return true;
         }
 
-        $this->error("API deps not found. Install:");
-        $this->line("  - Sanctum: composer require laravel/sanctum");
-        $this->line("  - Passport: composer require laravel/passport");
-        $this->line("  - JWT: composer require tymon/jwt-auth");
-        $this->newLine();
-        $this->line("Note: Sanctum is recommended.");
+        $this->error("API authentication package not found. Skipping");
 
         return false;
     }

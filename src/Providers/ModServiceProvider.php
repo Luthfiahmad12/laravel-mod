@@ -41,6 +41,9 @@ class ModServiceProvider extends ServiceProvider
             // Load migrations directly
             $this->loadModuleMigrations($modulePath);
             
+            // Load Livewire components if Livewire is available
+            $this->loadModuleLivewireComponents($modulePath, $module);
+            
             // Register module service provider if exists
             $provider = "App\\Modules\\{$module}\\Providers\\{$module}ServiceProvider";
             if (class_exists($provider)) {
@@ -122,6 +125,30 @@ class ModServiceProvider extends ServiceProvider
         $migrations = $modulePath . 'Migrations';
         if (File::isDirectory($migrations)) {
             $this->loadMigrationsFrom($migrations);
+        }
+    }
+    
+    protected function loadModuleLivewireComponents(string $modulePath, string $module): void
+    {
+        // Check if Livewire is installed
+        if (!class_exists('Livewire\Component')) {
+            return;
+        }
+        
+        $livewirePath = $modulePath . 'Livewire';
+        if (File::isDirectory($livewirePath)) {
+            foreach (File::files($livewirePath) as $file) {
+                if ($file->getExtension() === 'php') {
+                    $componentClass = "App\\Modules\\{$module}\\Livewire\\" . $file->getBasename('.php');
+                    $componentAlias = strtolower($module) . '-' . strtolower($file->getBasename('.php'));
+                    
+                    // Check if class exists before registering
+                    if (class_exists($componentClass)) {
+                        // Register with Livewire
+                        \Livewire\Livewire::component($componentAlias, $componentClass);
+                    }
+                }
+            }
         }
     }
 }

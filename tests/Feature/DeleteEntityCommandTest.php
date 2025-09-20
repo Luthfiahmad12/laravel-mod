@@ -13,16 +13,18 @@ class DeleteEntityCommandTest extends TestCase
         parent::setUp();
         
         // Create modules directory if not exists
-        if (!File::exists(base_path('modules'))) {
-            File::makeDirectory(base_path('modules'));
+        $modulesPath = base_path('modules');
+        if (!File::exists($modulesPath)) {
+            File::makeDirectory($modulesPath, 0755, true);
         }
     }
     
     protected function tearDown(): void
     {
         // Clean up created modules
-        if (File::exists(base_path('modules/TestModule'))) {
-            File::deleteDirectory(base_path('modules/TestModule'));
+        $testModulePath = base_path('modules/TestModule');
+        if (File::exists($testModulePath)) {
+            File::deleteDirectory($testModulePath);
         }
         
         parent::tearDown();
@@ -32,12 +34,15 @@ class DeleteEntityCommandTest extends TestCase
     public function it_can_delete_entity_from_existing_module()
     {
         // Create module and entity first
-        $this->artisan('mod:make', ['name' => 'TestModule']);
-        $this->artisan('mod:make-entity', ['module' => 'TestModule', 'name' => 'Post']);
+        $this->artisan('mod:make', ['name' => 'TestModule'])
+            ->assertExitCode(0);
+            
+        $this->artisan('mod:make-entity', ['module' => 'TestModule', 'name' => 'Post'])
+            ->assertExitCode(0);
         
         // Assert entity exists
-        $this->assertFileExists(base_path('modules/TestModule/Models/Post.php'));
-        $this->assertFileExists(base_path('modules/TestModule/Http/Controllers/PostController.php'));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Models/Post.php')));
+        $this->assertTrue(file_exists(base_path('modules/TestModule/Http/Controllers/PostController.php')));
         
         // Mock confirmation and delete entity
         $this->artisan('mod:delete-entity', ['module' => 'TestModule', 'entity' => 'Post'])
@@ -46,9 +51,9 @@ class DeleteEntityCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert entity files are deleted
-        $this->assertFileDoesNotExist(base_path('modules/TestModule/Models/Post.php'));
-        $this->assertFileDoesNotExist(base_path('modules/TestModule/Http/Controllers/PostController.php'));
-        $this->assertFileDoesNotExist(base_path('modules/TestModule/Http/Requests/PostRequest.php'));
+        $this->assertFalse(file_exists(base_path('modules/TestModule/Models/Post.php')));
+        $this->assertFalse(file_exists(base_path('modules/TestModule/Http/Controllers/PostController.php')));
+        $this->assertFalse(file_exists(base_path('modules/TestModule/Http/Requests/PostRequest.php')));
     }
     
     /** @test */

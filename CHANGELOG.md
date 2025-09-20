@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Module caching with `mod:cache` command
 - Web and API module support
 - Livewire component generation
+- Automatic Livewire component discovery and registration
+- GitHub Actions workflow for automated testing
 - Comprehensive test suite
 - Documentation and examples
 
@@ -24,12 +26,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced service provider architecture
 - Optimized module loading with caching
 - Simplified route and view loading
+- Updated API documentation to reflect Laravel Sanctum inclusion in modern Laravel versions
 
 ### Fixed
 - API dependency checking for JWT Auth
 - Route naming consistency
 - View path organization
 - Command output formatting
+- Automatic Livewire component loading
+- README badge configuration
+- API documentation for Laravel Sanctum installation
+- Improved Tymon JWT Auth class detection
 
 ## [1.0.0] - 2025-09-19
 

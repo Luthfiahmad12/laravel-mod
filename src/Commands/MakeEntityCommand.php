@@ -72,6 +72,7 @@ class MakeEntityCommand extends Command
             'api-route.stub' => "Routes/api-{$kebab}.php",
             'view.stub' => "Views/index.blade.php",
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
+            'service.stub' => "Services/{$studly}Service.php",
         ] : [
             'model.stub' => "Models/{$studly}.php",
             'request.stub' => "Http/Requests/{$studly}Request.php",
@@ -79,6 +80,7 @@ class MakeEntityCommand extends Command
             'route.stub' => "Routes/web-{$kebab}.php",
             'view.stub' => "Views/index.blade.php",
             'migration.stub' => "Migrations/" . date('Y_m_d_His') . "_create_{$snakePlural}_table.php",
+            'service.stub' => "Services/{$studly}Service.php",
         ];
 
         // Add Livewire components if not API and Livewire is available

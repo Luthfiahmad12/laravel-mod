@@ -13,16 +13,23 @@ class MakeModuleCommandTest extends TestCase
         parent::setUp();
         
         // Create modules directory if not exists
-        if (!File::exists(base_path('modules'))) {
-            File::makeDirectory(base_path('modules'));
+        $modulesPath = base_path('modules');
+        if (!File::exists($modulesPath)) {
+            File::makeDirectory($modulesPath, 0755, true);
         }
     }
     
     protected function tearDown(): void
     {
         // Clean up created modules
-        if (File::exists(base_path('modules/TestModule'))) {
-            File::deleteDirectory(base_path('modules/TestModule'));
+        $testModulePath = base_path('modules/TestModule');
+        if (File::exists($testModulePath)) {
+            File::deleteDirectory($testModulePath);
+        }
+        
+        $testApiModulePath = base_path('modules/TestApiModule');
+        if (File::exists($testApiModulePath)) {
+            File::deleteDirectory($testApiModulePath);
         }
         
         parent::tearDown();
@@ -36,24 +43,25 @@ class MakeModuleCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert module directory is created
-        $this->assertDirectoryExists(base_path('modules/TestModule'));
+        $this->assertTrue(is_dir(base_path('modules/TestModule')));
         
         // Assert basic structure
-        $this->assertDirectoryExists(base_path('modules/TestModule/Http/Controllers'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Http/Requests'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Models'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Services'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Providers'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Routes'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Views'));
-        $this->assertDirectoryExists(base_path('modules/TestModule/Migrations'));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Http/Controllers')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Http/Requests')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Models')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Services')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Providers')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Routes')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Views')));
+        $this->assertTrue(is_dir(base_path('modules/TestModule/Migrations')));
     }
     
     /** @test */
     public function it_cannot_create_module_if_already_exists()
     {
         // Create module first
-        $this->artisan('mod:make', ['name' => 'TestModule']);
+        $this->artisan('mod:make', ['name' => 'TestModule'])
+            ->assertExitCode(0);
         
         // Try to create again
         $this->artisan('mod:make', ['name' => 'TestModule'])
@@ -78,7 +86,7 @@ class MakeModuleCommandTest extends TestCase
             ->assertExitCode(0);
             
         // Assert API structure
-        $this->assertDirectoryExists(base_path('modules/TestApiModule/Http/Controllers/Api'));
+        $this->assertTrue(is_dir(base_path('modules/TestApiModule/Http/Controllers/Api')));
         $this->assertFileExists(base_path('modules/TestApiModule/Routes/api-test-api-module.php'));
     }
 }

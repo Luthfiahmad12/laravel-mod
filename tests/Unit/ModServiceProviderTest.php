@@ -41,4 +41,11 @@ class ModServiceProviderTest extends TestCase
         $provider = new ModServiceProvider($this->app);
         $this->assertTrue(method_exists($provider, 'loadModuleMigrations'));
     }
+    
+    /** @test */
+    public function it_can_load_module_livewire_components_method()
+    {
+        $provider = new ModServiceProvider($this->app);
+        $this->assertTrue(method_exists($provider, 'loadModuleLivewireComponents'));
+    }
 }
