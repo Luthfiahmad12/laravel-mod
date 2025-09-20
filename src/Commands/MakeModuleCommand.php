@@ -29,7 +29,7 @@ class MakeModuleCommand extends Command
         $modulePath = base_path("modules/{$studly}");
 
         if (File::exists($modulePath)) {
-            $this->error("Module {$studly} already exists!");
+            $this->fail("Module {$studly} already exists!");
             return self::INVALID;
         }
 
@@ -53,7 +53,6 @@ class MakeModuleCommand extends Command
             'Routes',
             'Migrations',
             'Views',
-            // Tambahkan Livewire folder jika Livewire tersedia
             class_exists('Livewire\Component') ? 'Livewire' : null,
         ];
 
@@ -85,7 +84,7 @@ class MakeModuleCommand extends Command
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
             'api-route.stub'        => "Routes/api.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module
+            'view.stub'             => "Views/{$kebab}s/index.blade.php", // View dalam folder plural
         ] : [
             'controller.stub'       => "Http/Controllers/{$studly}Controller.php",
             'model.stub'            => "Models/{$studly}.php",
@@ -94,7 +93,7 @@ class MakeModuleCommand extends Command
             'service.stub'          => "Services/{$studly}Service.php",
             'service-provider.stub' => "Providers/{$studly}ServiceProvider.php",
             'route.stub'            => "Routes/web.php", // Nama file lebih sederhana
-            'view.stub'             => "Views/{$kebab}/index.blade.php", // View dalam folder sesuai nama module
+            'view.stub'             => "Views/{$kebab}s/index.blade.php", // View dalam folder plural
         ];
 
         // Tambahkan Livewire stubs jika Livewire tersedia
@@ -138,11 +137,11 @@ class MakeModuleCommand extends Command
                 $this->warn("⚠️ Failed to create file: {$target}");
                 continue;
             }
-            $this->line("  └── 📄 <info>{$target}</info>");
+            $this->line("  - <info>{$target}</info>");
         }
 
         $this->newLine();
-        $this->info("✅ Module <comment>{$studly}</comment> generated successfully!" . ($isApi ? " (API)" : ""));
+        $this->info("Module {$studly} generated successfully!" . ($isApi ? " (API)" : ""));
         $this->newLine();
 
         return self::SUCCESS;
@@ -177,7 +176,7 @@ class MakeModuleCommand extends Command
             return true;
         }
 
-        $this->error("API authentication package not found. Skipping");
+        $this->fail("API authentication package not found. Skipping");
 
         return false;
     }

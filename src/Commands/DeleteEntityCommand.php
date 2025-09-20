@@ -24,7 +24,7 @@ class DeleteEntityCommand extends Command
         
         // Validate module exists
         if (!File::exists($modulePath)) {
-            $this->error("Module {$moduleStudly} does not exist!");
+            $this->fail("Module {$moduleStudly} does not exist!");
             return self::INVALID;
         }
         
@@ -109,9 +109,9 @@ class DeleteEntityCommand extends Command
         if (empty($deletedFiles)) {
             $this->warn("No files found for entity {$entityStudly} in module {$moduleStudly}.");
         } else {
-            $this->info("✅ Entity <comment>{$entityStudly}</comment> deleted successfully from module <comment>{$moduleStudly}</comment>!");
+            $this->info("Entity {$entityStudly} deleted successfully from module {$moduleStudly}!");
             foreach ($deletedFiles as $file) {
-                $this->line("  └── 📄 <info>{$file}</info>");
+                $this->line("  - <info>{$file}</info>");
             }
         }
         
@@ -133,7 +133,7 @@ class DeleteEntityCommand extends Command
             $webRouteContent = preg_replace($pattern, '', $webRouteContent);
             
             File::put($webRoutePath, $webRouteContent);
-            $this->line("  └── 🔄 <info>Removed route from web.php</info>");
+            $this->line("  - <info>Removed route from web.php</info>");
         }
 
         // For API routes (if exists)
@@ -146,7 +146,7 @@ class DeleteEntityCommand extends Command
             $apiRouteContent = preg_replace($pattern, '', $apiRouteContent);
             
             File::put($apiRoutePath, $apiRouteContent);
-            $this->line("  └── 🔄 <info>Removed route from api.php</info>");
+            $this->line("  - <info>Removed route from api.php</info>");
         }
     }
 }

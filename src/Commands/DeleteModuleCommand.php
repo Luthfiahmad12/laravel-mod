@@ -18,7 +18,7 @@ class DeleteModuleCommand extends Command
 
         // Validate module exists
         if (!File::exists($modulePath)) {
-            $this->error("Module {$studly} does not exist!");
+            $this->fail("Module {$studly} does not exist!");
             return self::INVALID;
         }
 
@@ -31,7 +31,7 @@ class DeleteModuleCommand extends Command
         // Delete module directory
         File::deleteDirectory($modulePath);
 
-        $this->info("✅ Module <comment>{$studly}</comment> deleted successfully!");
+        $this->info("Module {$studly} deleted successfully!");
 
         return self::SUCCESS;
     }
